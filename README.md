@@ -3,6 +3,7 @@
 AED da disciplina de Inteligência Artificial, curso de Ciência de Dados e Inteligência Artificial, PUC Goiás.
 
 Aluno: Fellipe Gomes de Sousa Oliveira (matrícula 2026.1.0137.0006-9)
+
 Professor: Victor Lima Queiroz
 
 ## O problema
