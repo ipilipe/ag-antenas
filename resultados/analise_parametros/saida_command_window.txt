@@ -1,0 +1,45 @@
+tamPopulacao      = 10.000 | fitness = 0.9499 (dp 0.0001) | cobertura =  99.99% | antenas = 1.0
+tamPopulacao      = 30.000 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+tamPopulacao      = 60.000 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+tamPopulacao      = 100.000 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+taxaCruzamento    =  0.000 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+taxaCruzamento    =  0.500 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+taxaCruzamento    =  0.850 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+taxaCruzamento    =  1.000 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+taxaMutacao       =  0.010 | fitness = 0.9499 (dp 0.0001) | cobertura =  99.99% | antenas = 1.0
+taxaMutacao       =  0.050 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+taxaMutacao       =  0.150 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+taxaMutacao       =  0.400 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+numElite          =  0.000 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+numElite          =  1.000 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+numElite          =  2.000 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+numElite          =  5.000 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+penalidadeAntena  =  0.000 | fitness = 1.0000 (dp 0.0000) | cobertura = 100.00% | antenas = 3.0
+penalidadeAntena  =  0.010 | fitness = 0.9900 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+penalidadeAntena  =  0.050 | fitness = 0.9500 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+penalidadeAntena  =  0.200 | fitness = 0.8000 (dp 0.0000) | cobertura = 100.00% | antenas = 1.0
+         Parametro          Valor    FitnessMedio    FitnessDP     CoberturaMediaPct    AntenasMedia
+    ____________________    _____    ____________    __________    _________________    ____________
+
+    {'tamPopulacao'    }      10       0.94987       0.00010887         99.987               1      
+    {'tamPopulacao'    }      30          0.95                0            100               1      
+    {'tamPopulacao'    }      60          0.95                0            100               1      
+    {'tamPopulacao'    }     100          0.95                0            100               1      
+    {'taxaCruzamento'  }       0       0.94999       1.9876e-05         99.999               1      
+    {'taxaCruzamento'  }     0.5          0.95                0            100               1      
+    {'taxaCruzamento'  }    0.85          0.95                0            100               1      
+    {'taxaCruzamento'  }       1       0.94999       1.9876e-05         99.999               1      
+    {'taxaMutacao'     }    0.01       0.94992       6.5922e-05         99.992               1      
+    {'taxaMutacao'     }    0.05       0.94999       1.9876e-05         99.999               1      
+    {'taxaMutacao'     }    0.15          0.95                0            100               1      
+    {'taxaMutacao'     }     0.4          0.95                0            100               1      
+    {'numElite'        }       0          0.95                0            100               1      
+    {'numElite'        }       1          0.95                0            100               1      
+    {'numElite'        }       2          0.95                0            100               1      
+    {'numElite'        }       5          0.95                0            100               1      
+    {'penalidadeAntena'}       0             1                0            100               3      
+    {'penalidadeAntena'}    0.01          0.99                0            100               1      
+    {'penalidadeAntena'}    0.05          0.95                0            100               1      
+    {'penalidadeAntena'}     0.2           0.8                0            100               1      
+
+>> 

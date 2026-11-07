@@ -1,0 +1,64 @@
+================ CENARIO B ================
+Otimo teorico: 5 antena(s) | cobertura 3.9270% | area 1570.80 km^2 | fitness 0.02927
+Grade usada pelo AG: 800 x 800 celulas (0.250 km cada)
+
+Execucao  1 | antenas = 5 | cobertura =   3.9347% (grade fina   3.9276%) | fitness = 0.02935 | 4.8 s
+Execucao  2 | antenas = 5 | cobertura =   3.9347% (grade fina   3.9280%) | fitness = 0.02935 | 4.5 s
+Execucao  3 | antenas = 5 | cobertura =   3.9347% (grade fina   3.9278%) | fitness = 0.02935 | 4.3 s
+Execucao  4 | antenas = 5 | cobertura =   3.9348% (grade fina   3.9277%) | fitness = 0.02935 | 4.5 s
+Execucao  5 | antenas = 5 | cobertura =   3.9345% (grade fina   3.9276%) | fitness = 0.02935 | 4.3 s
+Execucao  6 | antenas = 5 | cobertura =   3.9348% (grade fina   3.9277%) | fitness = 0.02935 | 4.5 s
+Execucao  7 | antenas = 5 | cobertura =   3.9347% (grade fina   3.9277%) | fitness = 0.02935 | 4.1 s
+Execucao  8 | antenas = 5 | cobertura =   3.9347% (grade fina   3.9276%) | fitness = 0.02935 | 4.3 s
+Execucao  9 | antenas = 5 | cobertura =   3.9345% (grade fina   3.9277%) | fitness = 0.02935 | 4.4 s
+Execucao 10 | antenas = 5 | cobertura =   3.9352% (grade fina   3.9279%) | fitness = 0.02935 | 4.2 s
+    Execucao    NumAntenas    CoberturaPct    CoberturaFinaPct    AreaKm2    Fitness     FitnessFina    GeracaoConvergencia    TempoSeg
+    ________    __________    ____________    ________________    _______    ________    ___________    ___________________    ________
+
+        1           5            3.9347            3.9276         1573.9     0.029347     0.029276              141              4.774 
+        2           5            3.9347             3.928         1573.9     0.029347      0.02928               77             4.5294 
+        3           5            3.9347            3.9278         1573.9     0.029347     0.029278               82             4.3328 
+        4           5            3.9348            3.9277         1573.9     0.029348     0.029277              147             4.5382 
+        5           5            3.9345            3.9276         1573.8     0.029345     0.029276              140             4.3083 
+        6           5            3.9348            3.9277         1573.9     0.029348     0.029277              124             4.4755 
+        7           5            3.9347            3.9277         1573.9     0.029347     0.029277               49             4.0701 
+        8           5            3.9347            3.9276         1573.9     0.029347     0.029276               88             4.3081 
+        9           5            3.9345            3.9277         1573.8     0.029345     0.029277              139             4.3555 
+       10           5            3.9352            3.9279         1574.1     0.029352     0.029279              117             4.2382 
+
+
+================ ESTATISTICAS (10 execucoes) ================
+            Metrica             Media      DesvioPadrao     Minimo     Mediana      Maximo 
+    _______________________    ________    ____________    ________    ________    ________
+
+    {'NumAntenas'         }           5              0            5           5           5
+    {'CoberturaPct'       }      3.9347     0.00018117       3.9345      3.9347      3.9352
+    {'CoberturaFinaPct'   }      3.9277     0.00012145       3.9276      3.9277       3.928
+    {'AreaKm2'            }      1573.9       0.072469       1573.8      1573.9      1574.1
+    {'Fitness'            }    0.029347     1.8117e-06     0.029345    0.029347    0.029352
+    {'FitnessFina'        }    0.029277     1.2145e-06     0.029276    0.029277     0.02928
+    {'GeracaoConvergencia'}       110.4         33.981           49       120.5         147
+    {'TempoSeg'           }       4.393        0.19418       4.0701      4.3441       4.774
+
+Quantidade de antenas na melhor solucao de cada execucao:
+  1 antena(s): 0 execucao(oes)
+  2 antena(s): 0 execucao(oes)
+  3 antena(s): 0 execucao(oes)
+  4 antena(s): 0 execucao(oes)
+  5 antena(s): 10 execucao(oes)
+
+Distancia media ao otimo teorico (grade fina): -0.026% | execucoes que chegaram ao otimo (ate 0,5%): 10 de 10
+
+================ MELHOR SOLUCAO GERAL (execucao 2) ================
+Antenas utilizadas : 5
+  Antena 1         : (18.9961 ; 184.3106) km
+  Antena 2         : (124.5000 ; 100.5572) km
+  Antena 3         : (145.5558 ; 51.9980) km
+  Antena 4         : (98.4468 ; 74.7531) km
+  Antena 5         : (41.8080 ; 44.5012) km
+Area coberta       : 1573.8750 km^2 de 40000.00 km^2
+Percentual coberto : 3.9347%
+Fitness            : 0.02935
+Area pela grade fina 3200x3200: 1571.1953 km^2 (3.9280%) | diferenca: 2.6797 km^2
+Area exata do otimo teorico: 1570.7963 km^2
+>> 

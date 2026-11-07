@@ -1,0 +1,27 @@
+CENARIO A (200 km^2) - executar_experimentos.m, MATLAB Online, 07/11/2026
+Main.m (execucao avulsa): 1 antena (7.1087 ; 7.1179), 100%, fitness 0.95, 0.38 s, convergiu ~geracao 70
+
+Otimo teorico: 1 antena(s) | cobertura 100.0000% | fitness 0.9500
+Exec NumAntenas CoberturaPct AreaKm2 Fitness GeracaoConvergencia TempoSeg
+1 1 100 200 0.95 79 0.33289
+2 1 100 200 0.95 121 0.28325
+3 1 100 200 0.95 66 0.29173
+4 1 100 200 0.95 20 0.29409
+5 1 100 200 0.95 109 0.27853
+6 1 100 200 0.95 69 0.27646
+7 1 100 200 0.95 120 0.27708
+8 1 100 200 0.95 125 0.2678
+9 1 100 200 0.95 86 0.28104
+10 1 100 200 0.95 107 0.26812
+
+Estatisticas: GeracaoConvergencia media 90.2 dp 32.981 min 20 mediana 96.5 max 125
+Tempo media 0.2851 dp 0.018853
+Todas as outras metricas com dp 0.
+10 de 10 atingiram o otimo; distancia media 0.000%
+Melhor geral (exec 1): antena (7.0407 ; 7.0912), 200 km^2, 100%, fitness 0.95
+Grade fina 1000x1000: 199.9988 km^2 (99.999%), diferenca 0.0012 km^2
+
+CENARIO B (1a versao, grade 150x150 com celula 1.33 km) - BUG de discretizacao
+10/10 com 5 antenas; 9 com 4.00% (1600 km2, fitness 0.03), exec 6 com 3.9956%; ger conv media 58.8 dp 12.985 (44-80); tempo ~0.58 s
+Grade fina 1000x1000 da melhor: 1570.28 km2 (3.926%) vs 1600 -> diferenca 29.72 km2; otimo teorico 3.927%
+Corrigido: grade 800x800 (0.25 km) com avaliacao local por bounding box.
