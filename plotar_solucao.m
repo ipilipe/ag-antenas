@@ -48,8 +48,8 @@ function fig = plotar_solucao(res, titulo)
     xlim([-margem, L + margem]);
     ylim([-margem, L + margem]);
     xlabel('x (km)'); ylabel('y (km)');
-    title(sprintf('%d antena(s) | cobertura %.2f%% | %.2f de %.2f km^2', ...
-        m.numAntenas, 100*m.cobertura, m.areaCoberta, p.areaRegiao));
+    title({sprintf('%d antena(s) | cobertura %.2f%%', m.numAntenas, 100*m.cobertura), ...
+           sprintf('%.1f de %.0f km^2', m.areaCoberta, p.areaRegiao)});
 
     % ---------------- 2) Evolucao do fitness ----------------
     subplot(1, 3, 2);

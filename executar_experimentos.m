@@ -1,12 +1,20 @@
 %% EXECUTAR_EXPERIMENTOS - Roda o AG varias vezes e analisa os resultados
 % Exigencia do trabalho: pelo menos 10 execucoes.
-% Gera: tabela com cada execucao, estatisticas, melhor solucao,
-%       arquivos CSV e figuras na pasta "resultados".
+% Gera: tabela com cada execucao, estatisticas, comparacao com o otimo
+%       teorico, melhor solucao, arquivos CSV e figuras na pasta "resultados".
+%
+% COMO ESCOLHER O CENARIO (digite no Command Window):
+%   executar_experimentos                     -> roda o cenario A (padrao)
+%   cenario = 'B'; executar_experimentos      -> roda o cenario B
+%   cenario = 'A'; executar_experimentos      -> volta para o cenario A
 
-clear; clc; close all;
+clearvars -except cenario; clc; close all;
 
+if ~exist('cenario', 'var')
+    cenario = 'A';   % 'A' = regiao de 200 km^2 (enunciado) | 'B' = regiao de 200 km x 200 km
+end
+cenario = upper(char(cenario));
 numExecucoes = 10;
-cenario = 'A';   % 'A' = regiao de 200 km^2 (enunciado) | 'B' = regiao de 200 km x 200 km
 
 params = struct();
 params.raio                = 10;
@@ -16,9 +24,13 @@ switch cenario
     case 'A'
         params.areaRegiao       = 200;
         params.penalidadeAntena = 0.05;
+        params.resolucao        = 150;    % celula de ~0,094 km
     case 'B'
         params.lado             = 200;
-        params.penalidadeAntena = 0.002;   % menor, pois cada antena cobre so ~0,8% da regiao
+        params.penalidadeAntena = 0.002;  % menor, pois cada antena cobre so ~0,8% da regiao
+        params.resolucao        = 800;    % celula de 0,25 km (grade grossa deixa o AG "trapacear")
+    otherwise
+        error('Cenario invalido. Use ''A'' ou ''B''.');
 end
 params.tamPopulacao        = 60;
 params.numGeracoes         = 150;
@@ -28,6 +40,8 @@ params.taxaMutacaoAtivacao = 0.05;
 params.numElite            = 2;
 params.tamTorneio          = 3;
 params.mostrarProgresso    = false;
+
+fprintf('================ CENARIO %s ================\n', cenario);
 
 pasta = fullfile('resultados', ['cenario_' cenario]);
 if ~exist(pasta, 'dir')
@@ -48,16 +62,25 @@ switch cenario
         cobOtima = nOtimo * pi * pTmp.raio^2 / pTmp.areaRegiao;
 end
 fitOtimo = pTmp.pesoCobertura * cobOtima - pTmp.penalidadeAntena * nOtimo;
-fprintf('Otimo teorico: %d antena(s) | cobertura %.4f%% | fitness %.4f\n\n', nOtimo, 100*cobOtima, fitOtimo);
+fprintf('Otimo teorico: %d antena(s) | cobertura %.4f%% | area %.2f km^2 | fitness %.5f\n', ...
+    nOtimo, 100*cobOtima, cobOtima * pTmp.areaRegiao, fitOtimo);
+fprintf('Grade usada pelo AG: %d x %d celulas (%.3f km cada)\n\n', ...
+    pTmp.resolucao, pTmp.resolucao, pTmp.lado / pTmp.resolucao);
 
-execucao   = (1:numExecucoes)';
-numAntenas = zeros(numExecucoes, 1);
-cobertura  = zeros(numExecucoes, 1);
-area       = zeros(numExecucoes, 1);
-fitness    = zeros(numExecucoes, 1);
+% Grade fina usada so para CONFERIR a area da solucao final de cada execucao
+pFina = pTmp;
+pFina.resolucao = max(1000, 4 * pTmp.resolucao);
+
+execucao    = (1:numExecucoes)';
+numAntenas  = zeros(numExecucoes, 1);
+cobertura   = zeros(numExecucoes, 1);
+coberturaFina = zeros(numExecucoes, 1);
+area        = zeros(numExecucoes, 1);
+fitness     = zeros(numExecucoes, 1);
+fitnessFina = zeros(numExecucoes, 1);
 geracaoConv = zeros(numExecucoes, 1);
-tempo      = zeros(numExecucoes, 1);
-todos      = cell(numExecucoes, 1);
+tempo       = zeros(numExecucoes, 1);
+todos       = cell(numExecucoes, 1);
 
 for e = 1:numExecucoes
     params.semente = e;          % semente diferente por execucao (reprodutivel)
@@ -65,27 +88,33 @@ for e = 1:numExecucoes
     res = ga_antenas(params);
     tempo(e) = toc;
 
-    todos{e}       = res;
-    numAntenas(e)  = res.melhor.numAntenas;
-    cobertura(e)   = 100 * res.melhor.cobertura;
-    area(e)        = res.melhor.areaCoberta;
-    fitness(e)     = res.melhor.fitness;
-    geracaoConv(e) = res.melhor.geracaoConvergencia;
+    m = res.melhor;
+    [fF, cF] = avaliar_populacao(m.ativo, m.x, m.y, [], [], pFina);
 
-    fprintf('Execucao %2d | antenas = %d | cobertura = %6.2f%% | fitness = %.4f | %.1f s\n', ...
-        e, numAntenas(e), cobertura(e), fitness(e), tempo(e));
+    todos{e}         = res;
+    numAntenas(e)    = m.numAntenas;
+    cobertura(e)     = 100 * m.cobertura;
+    coberturaFina(e) = 100 * cF;
+    area(e)          = m.areaCoberta;
+    fitness(e)       = m.fitness;
+    fitnessFina(e)   = fF;
+    geracaoConv(e)   = m.geracaoConvergencia;
+
+    fprintf('Execucao %2d | antenas = %d | cobertura = %8.4f%% (grade fina %8.4f%%) | fitness = %.5f | %.1f s\n', ...
+        e, numAntenas(e), cobertura(e), coberturaFina(e), fitness(e), tempo(e));
 end
 
 % ---------------- Tabela de resultados ----------------
-T = table(execucao, numAntenas, cobertura, area, fitness, geracaoConv, tempo, ...
-    'VariableNames', {'Execucao', 'NumAntenas', 'CoberturaPct', 'AreaKm2', ...
-                      'Fitness', 'GeracaoConvergencia', 'TempoSeg'});
+T = table(execucao, numAntenas, cobertura, coberturaFina, area, fitness, fitnessFina, geracaoConv, tempo, ...
+    'VariableNames', {'Execucao', 'NumAntenas', 'CoberturaPct', 'CoberturaFinaPct', 'AreaKm2', ...
+                      'Fitness', 'FitnessFina', 'GeracaoConvergencia', 'TempoSeg'});
 disp(T);
 writetable(T, fullfile(pasta, 'execucoes.csv'));
 
 % ---------------- Estatisticas ----------------
-metricas = {'NumAntenas', 'CoberturaPct', 'AreaKm2', 'Fitness', 'GeracaoConvergencia', 'TempoSeg'};
-dados = [numAntenas, cobertura, area, fitness, geracaoConv, tempo];
+metricas = {'NumAntenas', 'CoberturaPct', 'CoberturaFinaPct', 'AreaKm2', 'Fitness', ...
+            'FitnessFina', 'GeracaoConvergencia', 'TempoSeg'};
+dados = [numAntenas, cobertura, coberturaFina, area, fitness, fitnessFina, geracaoConv, tempo];
 Estat = table(metricas', mean(dados)', std(dados)', min(dados)', median(dados)', max(dados)', ...
     'VariableNames', {'Metrica', 'Media', 'DesvioPadrao', 'Minimo', 'Mediana', 'Maximo'});
 fprintf('\n================ ESTATISTICAS (%d execucoes) ================\n', numExecucoes);
@@ -98,14 +127,14 @@ for n = 1:params.maxAntenas
     fprintf('  %d antena(s): %d execucao(oes)\n', n, sum(numAntenas == n));
 end
 
-% Comparacao com o otimo teorico
-gap = 100 * (fitOtimo - fitness) / abs(fitOtimo);
-atingiu = gap <= 0.5;   % ate 0,5% do otimo conta como "atingiu"
-fprintf('\nDistancia media ao otimo teorico: %.3f%% | execucoes que chegaram ao otimo (ate 0,5%%): %d de %d\n', ...
+% Comparacao com o otimo teorico (usando a grade fina, que e mais proxima do valor real)
+gap = 100 * (fitOtimo - fitnessFina) / abs(fitOtimo);
+atingiu = abs(gap) <= 0.5;   % ate 0,5% do otimo conta como "atingiu"
+fprintf('\nDistancia media ao otimo teorico (grade fina): %.3f%% | execucoes que chegaram ao otimo (ate 0,5%%): %d de %d\n', ...
     mean(gap), sum(atingiu), numExecucoes);
 
 % ---------------- Melhor solucao geral ----------------
-[~, iMelhor] = max(fitness);
+[~, iMelhor] = max(fitnessFina);
 best = todos{iMelhor};
 m = best.melhor;
 
@@ -115,21 +144,14 @@ for k = 1:size(m.posicoes, 1)
     fprintf('  Antena %d         : (%.4f ; %.4f) km\n', k, m.posicoes(k, 1), m.posicoes(k, 2));
 end
 fprintf('Area coberta       : %.4f km^2 de %.2f km^2\n', m.areaCoberta, best.params.areaRegiao);
-fprintf('Percentual coberto : %.2f%%\n', 100*m.cobertura);
-fprintf('Fitness            : %.4f\n', m.fitness);
+fprintf('Percentual coberto : %.4f%%\n', 100*m.cobertura);
+fprintf('Fitness            : %.5f\n', m.fitness);
+fprintf('Area pela grade fina %dx%d: %.4f km^2 (%.4f%%) | diferenca: %.4f km^2\n', ...
+    pFina.resolucao, pFina.resolucao, coberturaFina(iMelhor)/100 * pFina.areaRegiao, ...
+    coberturaFina(iMelhor), abs(coberturaFina(iMelhor) - cobertura(iMelhor))/100 * pFina.areaRegiao);
+fprintf('Area exata do otimo teorico: %.4f km^2\n', cobOtima * pFina.areaRegiao);
 
-% Confere a area da melhor solucao com uma grade bem mais fina (1000 x 1000)
-% para mostrar o erro do calculo aproximado usado durante a evolucao.
-pFina = best.params;
-pFina.resolucao = 1000;
-h = pFina.lado / pFina.resolucao;
-v = (h/2):h:(pFina.lado - h/2);
-[FX, FY] = meshgrid(v, v);
-[~, cobFina] = avaliar_populacao(m.ativo, m.x, m.y, FX(:), FY(:), pFina);
-fprintf('Area pela grade fina 1000x1000: %.4f km^2 (%.3f%%) | diferenca: %.4f km^2\n', ...
-    cobFina * pFina.areaRegiao, 100*cobFina, abs(cobFina - m.cobertura) * pFina.areaRegiao);
-
-fig1 = plotar_solucao(best, sprintf('Melhor solucao geral (execucao %d)', iMelhor));
+fig1 = plotar_solucao(best, sprintf('Cenario %s - Melhor solucao geral (execucao %d)', cenario, iMelhor));
 saveas(fig1, fullfile(pasta, 'melhor_solucao.png'));
 
 % ---------------- Curvas de todas as execucoes ----------------
@@ -139,14 +161,14 @@ for e = 1:numExecucoes
     plot(todos{e}.historico.melhorFitness, 'LineWidth', 1);
 end
 xlabel('Geracao'); ylabel('Melhor fitness');
-title('Melhor fitness por geracao (10 execucoes)');
+title(sprintf('Cenario %s - Melhor fitness por geracao (10 execucoes)', cenario));
 
 subplot(1, 2, 2); hold on; grid on;
 for e = 1:numExecucoes
     plot(100*todos{e}.historico.melhorCobertura, 'LineWidth', 1);
 end
 xlabel('Geracao'); ylabel('Cobertura do melhor (%)');
-title('Cobertura por geracao (10 execucoes)');
+title(sprintf('Cenario %s - Cobertura por geracao (10 execucoes)', cenario));
 saveas(fig2, fullfile(pasta, 'curvas_execucoes.png'));
 
 save(fullfile(pasta, 'experimentos.mat'), 'T', 'Estat', 'todos', 'params');
